@@ -91,7 +91,7 @@ int DEVNULL::lastByte()
     Stream& dataPort;
 
     void startDataPort() {
-      dataPort = ethernet::begin(ETHERNET_TTY_PORT);
+      dataPort = ethernet::begin();
     }
 
 #else

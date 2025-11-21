@@ -112,7 +112,7 @@
 
 #define ETHERNET_ENABLE
 #ifdef ETHERNET_ENABLE
-  #define ETHERNET_TTY_PORT 3142
+  //
 #endif
 
 /***** SERIAL PORT CONFIGURATION *****/

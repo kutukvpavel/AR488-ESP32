@@ -1,3 +1,6 @@
 [submodule "src/AR488/ethernet_init"]
 	path = src/AR488/ethernet_init
 	url = git@github.com:kutukvpavel/ethernet_init.git
+[submodule "src/AR488/src/esp_eth_console"]
+	path = src/AR488/src/esp_eth_console
+	url = git@github.com:kutukvpavel/esp_eth_console.git
