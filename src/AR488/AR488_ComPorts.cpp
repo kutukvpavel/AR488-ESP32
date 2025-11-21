@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "AR488_ComPorts.h"
+#include "AR488_Ethernet.h"
 
 /***** AR488_ComPorts.cpp, ver. 0.53.12, 26/02/2023 *****/
 
@@ -84,6 +85,14 @@ int DEVNULL::lastByte()
     }
   
   #endif
+
+#elif defined(ETHERNET_ENABLE)
+
+    Stream& dataPort;
+
+    void startDataPort() {
+      dataPort = ethernet::begin(ETHERNET_TTY_PORT);
+    }
 
 #else
 

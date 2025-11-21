@@ -739,6 +739,26 @@ void gpioFuncList();
 /*************************************************/
 
 
+#ifdef ESP32_Paul_WT32ETH01
+  #define DATABUS_IS_SHIFT_REGISTERED
+  #define DATABUS_DST_LOAD_LEVEL HIGH
+
+  #define DIN_PIN       36
+  #define DOUT_PIN      38
+  #define DCLK_PIN      12
+  #define DST_PIN       37
+
+  #define IFC_PIN   5   /* GPIB 9  */
+  #define NDAC_PIN  15   /* GPIB 8  */
+  #define NRFD_PIN  14   /* GPIB 7  */
+  #define DAV_PIN   17   /* GPIB 6  */
+  #define EOI_PIN   4   /* GPIB 5  */
+
+  #define SRQ_PIN    39   /* GPIB 10 */
+  #define REN_PIN    33   /* GPIB 17 */
+  #define ATN_PIN    32   /* GPIB 11 */
+#endif
+
 
 /**************************************/
 /***** ESP32 DEFINITIONS SECTION *****/

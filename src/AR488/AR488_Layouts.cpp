@@ -1876,25 +1876,39 @@ void setGpibDbus(uint8_t db) {
 //#ifdef AR488_CUSTOM
 #if defined (AR488_CUSTOM) || defined (NON_ARDUINO)
 
-
+#ifndef DATABUS_IS_SHIFT_REGISTERED
 uint8_t databus[8] = { DIO1_PIN, DIO2_PIN, DIO3_PIN, DIO4_PIN, DIO5_PIN, DIO6_PIN, DIO7_PIN, DIO8_PIN };
+#endif
 
 uint8_t ctrlbus[8] = { IFC_PIN, NDAC_PIN, NRFD_PIN, DAV_PIN, EOI_PIN, REN_PIN, SRQ_PIN, ATN_PIN };
 
 
 /***** Set the GPIB data bus to input pullup *****/
 void readyGpibDbus() {
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+  digitalWrite(DST_PIN, DATABUS_DST_LOAD_LEVEL);
+#else
   for (uint8_t i=0; i<8; i++){
     pinMode(databus[i], INPUT_PULLUP);
   }
+#endif
 }
 
 
 /***** Read the GPIB data bus wires to collect the byte of data *****/
 uint8_t readGpibDbus() {
   uint8_t db = 0;
-  for (uint8_t i=0; i<8; i++){
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+  digitalWrite(DST_PIN, !DATABUS_DST_LOAD_LEVEL);
+#endif
+  for (uint8_t i=7; i>=0; i++){
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+    db |= (digitalRead(DIN_PIN) ? 0 : 1u<<i );
+    digitalWrite(DCLK_PIN, HIGH);
+    digitalWrite(DCLK_PIN, LOW);
+#else
     db = db + (digitalRead(databus[i]) ? 0 : 1<<i );
+#endif
   }
   return db;
 }
@@ -1903,9 +1917,19 @@ uint8_t readGpibDbus() {
 /***** Set the GPIB data bus to output and with the requested byte *****/
 void setGpibDbus(uint8_t db) {
 
-  for (uint8_t i=0; i<8; i++){
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+  digitalWrite(DST_PIN, !DATABUS_DST_LOAD_LEVEL);
+#endif
+
+  for (uint8_t i=7; i>=0; i--){
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+    digitalWrite(DOUT_PIN, ((db&(1<<i)) ? LOW : HIGH) );
+    digitalWrite(DCLK_PIN, HIGH);
+    digitalWrite(DCLK_PIN, LOW);
+#else
     pinMode(databus[i], OUTPUT);
     digitalWrite(databus[i], ((db&(1<<i)) ? LOW : HIGH) );
+#endif
   }
   
 }

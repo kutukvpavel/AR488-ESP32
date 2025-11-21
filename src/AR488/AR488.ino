@@ -13,7 +13,6 @@
 #include "AR488_ComPorts.h"
 #include "AR488_Eeprom.h"
 
-
 /***** FWVER "AR488 GPIB controller, ver. 0.53.23 (JW), 18/07/2025" *****/
 
 /*
@@ -370,12 +369,26 @@ void setup() {
   digitalWrite(REMOTE_SIGNAL_PIN, LOW);
 #endif
 
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+  pinMode(DIN_PIN, INPUT);
+  pinMode(DCLK_PIN, OUTPUT);
+  digitalWrite(DCLK_PIN, LOW);
+  pinMode(DOUT_PIN, OUTPUT);
+  digitalWrite(DOUT_PIN, LOW);
+  digitalWrite(DST_PIN, DATABUS_DST_LOAD_LEVEL);
+  pinMode(DST_PIN, OUTPUT);
+  digitalWrite(DST_PIN, DATABUS_DST_LOAD_LEVEL);
+#endif
 
   // Initialise parse buffer
   flushPbuf();
 
   // Initialise serial at the configured baud rate
-  startDataPort(AR_SERIAL_SPEED);
+  startDataPort(
+#ifdef DATAPORT_ENABLE
+    AR_SERIAL_SPEED
+#endif
+  );
 //  AR_SERIAL_PORT.begin(AR_SERIAL_SPEED);
 
 #ifdef DEBUG_ENABLE
@@ -2476,6 +2489,12 @@ void xdiag_h(char *params){
 
 /***** Print the pinout and pin states for the data bus *****/
 void printDbPinout(){
+#ifdef DATABUS_IS_SHIFT_REGISTERED
+  printPin(F("DIN"), DIN_PIN);
+  printPin(F("DOUT"), DOUT_PIN);
+  printPin(F("DCLK"), DCLK_PIN);
+  printPin(F("DST"), DST_PIN);
+#else
   printPin(F("DIO1"), DIO1_PIN);
   printPin(F("DIO2"), DIO2_PIN);
   printPin(F("DIO3"), DIO3_PIN);
@@ -2484,6 +2503,7 @@ void printDbPinout(){
   printPin(F("DIO6"), DIO6_PIN);
   printPin(F("DIO7"), DIO7_PIN);
   printPin(F("DIO8"), DIO8_PIN);
+#endif
 }
 
 

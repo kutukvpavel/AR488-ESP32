@@ -46,10 +46,14 @@ private:
 
 
 
-#ifdef DATAPORT_ENABLE
+#if defined(DATAPORT_ENABLE) || defined(ETHERNET_ENABLE) 
 
   extern Stream& dataPort;
-  void startDataPort(unsigned long baud);
+  void startDataPort(
+#ifdef DATAPORT_ENABLE
+    unsigned long baud
+#endif
+  );
 
   #define DATAPORT_START() startDataPort()
   #define DATA_RAW_PRINT(str) dataPort.print(str)

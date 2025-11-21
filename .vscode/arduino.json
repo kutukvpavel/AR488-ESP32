@@ -1,0 +1,6 @@
+{
+    "board": "esp32:esp32:wt32-eth01",
+    "programmer": "esptool",
+    "sketch": "src/AR488/AR488.ino",
+    "configuration": "PartitionScheme=min_spiffs,FlashMode=qio,FlashFreq=80,UploadSpeed=921600,DebugLevel=none,EraseFlash=none"
+}
